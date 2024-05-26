@@ -31,7 +31,7 @@ public class Main {
 
                 }
             }*/
-            for (int i = 1; i < 256; i++) {
+            /*for (int i = 1; i < 256; i++) {
                 binaryData = Filter.threshold_filter_UP(maskData, i);
                 newImg = Util.makeImg(binaryData);
                 Util.outputImg(newImg, newPath, "UP-"+Integer.toString(i) +"-"+fileName);
@@ -39,7 +39,7 @@ public class Main {
                 binaryData = Filter.threshold_filter_DOWN(maskData, i);
                 newImg = Util.makeImg(binaryData);
                 Util.outputImg(newImg, newPath, "DOWN-"+Integer.toString(i) +"-"+fileName);
-            }
+            }*/
             thresholds = Ostu_Thresholding.multiLevel_threshold(Util.summation(maskData));
             threshold = Ostu_Thresholding.otsu_threshold(Util.summation(maskData));
             binaryData = Filter.threshold_filter_UP(maskData, threshold);
@@ -55,7 +55,9 @@ public class Main {
             System.out.printf("fileName: %s  threshold: %d\n", fileName, threshold);
             System.out.printf("threshold 1: %d  threshold 2: %d\n", thresholds[0], thresholds[1]);
             binaryData = Filter.threshold_filter_UP_AND_DOWN(maskData, thresholds[0], thresholds[1]);
+            
             newImg = Util.makeImg(binaryData);
+            Util.outputImg(newImg, newPath, fileName);
             //Util.outputImg(newImg, newPath, "multiLevel_threshold"+fileName);
         }
         System.out.println(arr.length);
