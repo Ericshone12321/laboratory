@@ -72,7 +72,7 @@ public class Ostu_Thresholding {
 				
 				variance = w1 * (m1-prefix_weight_his[255]) * (m1-prefix_weight_his[255]) + 
 						   w2 * (m2-prefix_weight_his[255]) * (m2-prefix_weight_his[255]) + 
-						   w3 + (m3-prefix_weight_his[255]) * (m3-prefix_weight_his[255]);
+						   w3 * (m3-prefix_weight_his[255]) * (m3-prefix_weight_his[255]);
 						   
 				if (variance > max_var) {
 					threshold_1 = u;
@@ -84,5 +84,4 @@ public class Ostu_Thresholding {
 	
 		return new int[] {threshold_1, threshold_2};
 	}
-    
 }

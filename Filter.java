@@ -38,7 +38,7 @@ public class Filter {
                         newData[i][j][c] = 0xff;
 
                     }else {
-                        newData[i][j][c] = 0x0;
+                        newData[i][j][c] = 0x00;
 
                     }
                 }
