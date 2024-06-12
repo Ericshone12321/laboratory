@@ -4,8 +4,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Util {
-	
-	final static int checkPixelBounds(int value){
+    final static int checkPixelBounds(int value){
 		if (value >255) return 255;
 		if (value <0) return 0;
 		return value;
@@ -33,7 +32,7 @@ public class Util {
 	final static int covertToGray(int r, int g, int b){
 		return checkPixelBounds((int) (0.2126 * r + 0.7152 * g + 0.0722 * b));		
 	}
-	
+
 	
 	final static int checkImageBounds(int value, int length){
 		 if (value>length-1) return length-1;
@@ -71,6 +70,7 @@ public class Util {
 		}
 		return data;
 	}
+
 	static BufferedImage loadImg(String filename) {
 		BufferedImage img = null;
 		try {
@@ -81,72 +81,33 @@ public class Util {
 		}
 		return img;
 	}
-	static int[] summation(int[][][] data) {
-		int[] rData = new int[256];
-		for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j < data[0].length; j++) {
-				rData[data[i][j][0]]++;
-			}
-		}
-		return rData;
-	} 
-	
-	static int[][][] threshold_mask(int[][][] binaryData, int[][][] grayScaleData) {
-		int[][][] maskData = new int[binaryData.length][binaryData[0].length][3];
-		for (int i = 0; i < binaryData.length; i++) {
-			for (int j = 0; j < binaryData[0].length; j++) {
-				for (int c = 0; c < 3; c++) {
-					maskData[i][j][c] = (0xff ^ binaryData[i][j][c]) & grayScaleData[i][j][c];
-				}
-			}
-		}
 
-		return maskData;
-	}
-	
+	static int[][][] toGray(int[][][] data) {
+		int height = data.length;
+		int width = data[0].length;
+		int[][][] grayData = new int[height][width][3];
 
-	static int[][][] reflection(int data[][][]) {
-		int[][][] newData = new int[data.length][data[0].length][3];
-		for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j < data[0].length; j++) {
-				for (int c = 0; c < 3; c++) {
-					newData[i][j][c] = data[i][j][c] ^ 0xff;
-				}
-			}
-		}
-		return newData;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int grayScale = Util.covertToGray(data[i][j][0], data[i][j][1], data[i][j][2]);
+                grayData[i][j][0] = grayScale;
+                grayData[i][j][1] = grayScale;
+                grayData[i][j][2] = grayScale;
+            }
+        }
+		return grayData;
 	}
-	static int[][][] RGB2GrayScale(int[][][] data) {
-		int[][][] rData = new int[data.length][data[0].length][3];
-		int grayScale;
-		for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j < data[0].length; j++) {
-				grayScale = Util.covertToGray(data[i][j][0], data[i][j][1], data[i][j][2]);
-				for (int k = 0; k < 3; k++) {
-					rData[i][j][k] = grayScale;
-				}
-			}
-		}
-		return rData;
-	}
-	static void outputImg(BufferedImage img, String filePath, String fileName) {
-		try {
-			File File = new File(filePath + fileName );              
-			ImageIO.write(img, "png", File);
-		}catch(IOException e) {
-			System.out.println("IO exception");
-		} 
-		return;
-	}
-	static int totalPixel(int[][][] data) {
-		int sum = 0;
-		for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j < data[0].length; j++) {
-				if (data[i][j][0] != 0x0) {
-					sum++;
-				}
-			}
-		}
-		return sum;
-	}
+
+	//統計0~255灰階RGB之出現次數
+	static int[] histogram(int[][][] data) {
+		int height = data.length;
+		int width = data[0].length;
+		int[] histogram = new int [256];
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                histogram[data[j][i][0]] += 1;
+            }
+        }
+		return histogram;
+	}	
 }
